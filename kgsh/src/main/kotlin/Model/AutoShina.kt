@@ -1,12 +1,8 @@
 package com.skif.model
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 
 //JacksonXmlRootElement(localName = "Tyre")
 data class Tyre(
