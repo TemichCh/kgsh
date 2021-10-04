@@ -1,3 +1,4 @@
+import DAO.saveZamer
 import Model.AktTyre
 import Model.Akt
 import Private.getUrl
@@ -79,6 +80,6 @@ fun main(args: Array<String>) {
         val xmlMapper: ObjectMapper = XmlMapper()
         val value = xmlMapper.readValue(mess.readText(), Array<Akt>::class.java)
         println(value)
-
+        saveZamer(value)
     }
 }
