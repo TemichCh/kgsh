@@ -1,11 +1,14 @@
+import DAO.getTyres
 import DAO.saveZamer
 import Model.AktTyre
 import Model.Akt
 import Private.getUrl
+import Private.sendUrl
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.skif.model.Vehicles
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.features.*
@@ -13,7 +16,9 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.util.*
 import kotlinx.coroutines.runBlocking
+import org.joda.time.DateTime
 import java.io.File
 
 
@@ -24,7 +29,8 @@ val client = HttpClient(Apache) {
     }
     install(HttpTimeout) {
         // timeout config
-        requestTimeoutMillis = 10000
+        socketTimeoutMillis = 30000
+        requestTimeoutMillis = 100000
     }
     engine {
 
@@ -57,6 +63,7 @@ fun write2XMLString(obj: Any): String {
     return xmlMapper.writeValueAsString(obj)
 }
 
+@OptIn(InternalAPI::class)
 fun main(args: Array<String>) {
     println("Hello World!")
 
@@ -64,14 +71,16 @@ fun main(args: Array<String>) {
     println("Program arguments: ${args.joinToString()}")
 
 
-    /* val autos = Vehicles(getTyres())
+    //val s = "WWFuZGV4LkZpbnRlY2guQW5kcm9pZA=="
+    //println(s.decodeBase64String())
+     val autos = Vehicles(getTyres())
      val xml = write2XMLString(autos)
-     println(xml)*/
-
+     println(xml)
     runBlocking {
-        //sendRequest(sendUrl,HttpMethod.Post,write2XMLString(autos))
+        sendRequest(sendUrl,HttpMethod.Post,write2XMLString(autos))
 
-        val mess = sendRequest(getUrl, HttpMethod.Post, "")
+        val url = getUrl+"from=${DateTime.now().minusDays(4).toLocalDate().toDateTimeAtStartOfDay().toString("dd.MM.yyyy")}&to=${DateTime.now().toLocalDate().toDateTimeAtStartOfDay().toString("dd.MM.yyyy")}"
+        val mess = sendRequest(url, HttpMethod.Post, "")
         println(mess)
         /*val akt = Akt("123", "222","21.09.2021", "122",
             mutableListOf(AktTyre("22222", 112.25f)))
